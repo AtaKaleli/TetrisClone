@@ -6,32 +6,26 @@ using UnityEngine.Tilemaps;
 public class Gameboard : MonoBehaviour
 {
     [SerializeField] private TetrominoData[] tetrominos;
-    [SerializeField] private Vector3Int spawnPosition;
+    [SerializeField] private Vector3Int position;
 
 
-    public Block ActiveBlock { get; private set; }
-    public Tilemap Tilemap { get; private set; }
-
+    private Block activeBlock;
+    private Tilemap tilemap;
 
     private void Awake()
     {
-        ActiveBlock = GetComponentInChildren<Block>(); //?
-        Tilemap = GetComponentInChildren<Tilemap>();
-
-       
+        activeBlock = GetComponent<Block>();
+        tilemap = GetComponentInChildren<Tilemap>();
 
         for (int i = 0; i < tetrominos.Length; i++)
         {
             tetrominos[i].Initialize();
         }
-
-        
     }
-
 
     private void Start()
     {
-        SpawnPiece();
+        SpawnPiece();   
     }
 
     public void SpawnPiece()
@@ -39,9 +33,8 @@ public class Gameboard : MonoBehaviour
         int random = Random.Range(0, tetrominos.Length);
         TetrominoData tData = tetrominos[random];
 
-        ActiveBlock.Initialize(this, spawnPosition, tData);
-        Set(ActiveBlock);
-        
+        activeBlock.Initilize(this, position, tData);
+        Set(activeBlock);
     }
 
     public void Set(Block block)
@@ -49,8 +42,8 @@ public class Gameboard : MonoBehaviour
         for (int i = 0; i < block.Cells.Length; i++)
         {
             Vector3Int tilePosition = block.Cells[i] + block.Position;
-            Tilemap.SetTile(tilePosition, block.TData.tile);
+            tilemap.SetTile(tilePosition, block.TData.tile);
         }
+        
     }
-
 }
